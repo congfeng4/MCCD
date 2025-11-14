@@ -60,6 +60,7 @@ def collate_fn(batch, if_final_round_syndrome=False):
 
 if __name__ == '__main__':
     import sys
+
     sys.path.append(os.path.abspath('../'))
     from parseargs import generate_save_path, parse_all_args
 
@@ -82,6 +83,7 @@ if __name__ == '__main__':
     model.init_from(old_model)
 
     import numpy as np
+
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())
     params = sum([np.prod(p.size()) for p in model_parameters])
     print(f'Number of params in model: {params}')
@@ -89,6 +91,7 @@ if __name__ == '__main__':
     save_path = os.path.join('trained_models', generate_save_path(None, mle=False))
     print(f'Save to {save_path}')
     os.makedirs(save_path, exist_ok=True)
+
 
     def loss_fn(main_out, auxiliary_out, label, weight=0.5):
         main_out = main_out.view(-1, main_out.size(-1))
@@ -98,6 +101,7 @@ if __name__ == '__main__':
         H_main = nn.CrossEntropyLoss()(main_out, label)
         H_aux = nn.CrossEntropyLoss()(auxiliary_out, label)
         return H_main + H_aux * weight
+
 
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 

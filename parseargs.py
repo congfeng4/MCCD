@@ -3,8 +3,10 @@ import os
 import random
 import string
 
+
 def generate_random_string(length=16):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
 
 def parse_all_args(argv=None):
     parser = argparse.ArgumentParser()
@@ -42,6 +44,7 @@ def parse_all_args(argv=None):
     args, _ = parser.parse_known_args(argv)
     return args
 
+
 def generate_save_path(argv=None, mle=False):
     args = parse_all_args(argv)
 
@@ -56,6 +59,7 @@ def generate_save_path(argv=None, mle=False):
 
     print('Model save to:', args.model_save_path, flush=True)
     return path
+
 
 def generate_data_path(argv=None):
     args = parse_all_args(argv)

@@ -1,16 +1,18 @@
 import torch
 import torch.nn as nn
 
+
 class LSTMReLUUnit(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=2):
         super(LSTMReLUUnit, self).__init__()
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-        
+
     def forward(self, x, hidden):
         x = x.unsqueeze(1)
         lstm_out, hidden = self.lstm(x, hidden)
         lstm_out_last = lstm_out[:, -1, :]
         return lstm_out_last, hidden
+
 
 class TwoQubitLSTM(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=2):
@@ -31,6 +33,7 @@ class TwoQubitLSTM(nn.Module):
         hidden2 = (h2.contiguous(), c2.contiguous())
         return (out1, hidden1), (out2, hidden2)
 
+
 class TwoQubitLSTM2(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=2):
         super(TwoQubitLSTM2, self).__init__()
@@ -42,6 +45,7 @@ class TwoQubitLSTM2(nn.Module):
         lstm_out_tgt, hidden_tgt = self.lstm_tgt(x, hidden1)
         lstm_out_ctrl, hidden_ctrl = self.lstm_ctrl(x, hidden2)
         return (lstm_out_tgt[:, -1, :], hidden_tgt), (lstm_out_ctrl[:, -1, :], hidden_ctrl)
+
 
 class GateDependentLSTMReLUModel(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=2):
@@ -63,6 +67,7 @@ class GateDependentLSTMReLUModel(nn.Module):
         last_outs = [self.relu(hidden_arr[q][-1][0][-1, :, :]).unsqueeze(1)
                      for q in range(num_logical_qubits)]
         return torch.cat(last_outs, dim=1)
+
 
 class GateDependentLSTMReLUModelw2Q(GateDependentLSTMReLUModel):
     def __init__(self, input_size, hidden_size, num_layers=2, if_large_lstm_2q=True):
@@ -95,6 +100,7 @@ class GateDependentLSTMReLUModelw2Q(GateDependentLSTMReLUModel):
                      for q in range(num_logical_qubits)]
         return torch.cat(last_outs, dim=1)
 
+
 class MainReadout(nn.Module):
     def __init__(self, hidden_size, fx_len):
         super(MainReadout, self).__init__()
@@ -109,6 +115,7 @@ class MainReadout(nn.Module):
         out = self.fc2(out)
         return out
 
+
 class AuxiliaryReadout(nn.Module):
     def __init__(self, hidden_size):
         super(AuxiliaryReadout, self).__init__()
@@ -122,6 +129,7 @@ class AuxiliaryReadout(nn.Module):
         out = self.fc2(out)
         return out
 
+
 class MultiQubitMainReadout(nn.Module):
     def __init__(self, hidden_size, fx_len):
         super(MultiQubitMainReadout, self).__init__()
@@ -131,6 +139,7 @@ class MultiQubitMainReadout(nn.Module):
         return torch.cat([self.main_readout(x[:, q, :], fx[:, q, :]).unsqueeze(1)
                           for q in range(x.size(1))], dim=1)
 
+
 class MultiQubitAuxiliaryReadout(nn.Module):
     def __init__(self, hidden_size):
         super(MultiQubitAuxiliaryReadout, self).__init__()
@@ -139,6 +148,7 @@ class MultiQubitAuxiliaryReadout(nn.Module):
     def forward(self, x):
         return torch.cat([self.auxiliary_readout(x[:, q, :]).unsqueeze(1)
                           for q in range(x.size(1))], dim=1)
+
 
 class CircuitLSTMDecoder(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=2):
@@ -154,10 +164,12 @@ class CircuitLSTMDecoder(nn.Module):
         auxiliary_out = self.auxiliary_readout(x)
         return main_out, auxiliary_out
 
+
 class CircuitLSTMDecoderw2Q(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=2, if_large_lstm_2q=True):
         super(CircuitLSTMDecoderw2Q, self).__init__()
-        self.gate_dependent_lstm_relu = GateDependentLSTMReLUModelw2Q(input_size, hidden_size, num_layers, if_large_lstm_2q)
+        self.gate_dependent_lstm_relu = GateDependentLSTMReLUModelw2Q(input_size, hidden_size, num_layers,
+                                                                      if_large_lstm_2q)
         fx_len = input_size // 2
         self.main_readout = MultiQubitMainReadout(hidden_size, fx_len)
         self.auxiliary_readout = MultiQubitAuxiliaryReadout(hidden_size)

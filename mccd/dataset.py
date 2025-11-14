@@ -3,6 +3,7 @@ from torch.utils.data import Dataset
 from pathlib import Path
 from .random_clifford_circuit import load_circuit_from_file
 
+
 class CachedSyndromeDataset(Dataset):
     def __init__(self, root_dir, code_distance, circuit_index, depth, batch_size):
         self.root_dir = Path(root_dir)
@@ -38,8 +39,10 @@ class CachedSyndromeDataset(Dataset):
             'circuit': circuit
         }
 
+
 import itertools
 from torch.utils.data import IterableDataset
+
 
 class MultiDepthCachedSyndromeDataset(IterableDataset):
     def __init__(self, root_dir, code_distance, circuit_index, batch_size, depth_list):
@@ -70,5 +73,3 @@ class MultiDepthCachedSyndromeDataset(IterableDataset):
                 yield next(iterators[idx])
             except StopIteration:
                 exhausted[idx] = True
-            
-            

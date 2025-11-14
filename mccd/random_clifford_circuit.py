@@ -1,8 +1,9 @@
-import numpy as np 
+import numpy as np
+
 
 class RandomCliffordCircuit():
     def __init__(self, n_logical_qubits, depth, circuit_index):
-        self.depth = depth 
+        self.depth = depth
         self.n_logical_qubits = n_logical_qubits
         self.circuit_index = circuit_index
         if circuit_index in ['3', '4']:
@@ -16,13 +17,13 @@ class RandomCliffordCircuit():
     def sample_circuit(self):
         self.sq_gates = np.random.choice(self.single_qubit_gate_list, size=(self.depth, self.n_logical_qubits))
         if self.include_two_qubit_gates:
-            self.tq_gates = np.stack([np.arange(self.n_logical_qubits)]*self.depth, axis=0)
+            self.tq_gates = np.stack([np.arange(self.n_logical_qubits)] * self.depth, axis=0)
             for d in range(self.depth):
                 np.random.shuffle(self.tq_gates[d])
 
     def load_circuit(self, sq_gates, tq_gates=None):
         assert sq_gates.shape == (self.depth, self.n_logical_qubits)
-        if not self.include_two_qubit_gates: assert tq_gates is None  
+        if not self.include_two_qubit_gates: assert tq_gates is None
         self.sq_gates = sq_gates
         self.tq_gates = tq_gates
 

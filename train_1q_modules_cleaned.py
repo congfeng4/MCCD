@@ -73,6 +73,7 @@ if __name__ == '__main__':
     model = CircuitLSTMDecoder(num_ancillas, num_ancillas * 8, num_layers=2).to(device)
 
     import numpy as np
+
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())
     params = sum([np.prod(p.size()) for p in model_parameters])
     print(f'Number of params in model: {params}')
@@ -80,6 +81,7 @@ if __name__ == '__main__':
     save_path = os.path.join('trained_models', generate_save_path(None, mle=False))
     print(f'Save to {save_path}')
     os.makedirs(save_path, exist_ok=True)
+
 
     def loss_fn(main_out, auxiliary_out, label, weight=0.5):
         main_out = main_out.view(-1, main_out.size(-1))
@@ -89,6 +91,7 @@ if __name__ == '__main__':
         H_aux = nn.CrossEntropyLoss()(auxiliary_out, label)
         return H_main + weight * H_aux
 
+
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     training_accuracies = []
@@ -97,7 +100,7 @@ if __name__ == '__main__':
 
     val_every_n_batches = args.validate_every_n_batches
     save_model_every_n_batches = args.save_model_every_n_batches
-    
+
     cf = get_collate_function(if_final_round_syndrome=args.if_final_round_syndrome)
 
     train_dataset = MultiDepthCachedSyndromeDataset(
@@ -157,7 +160,7 @@ if __name__ == '__main__':
 
             print(f"[Step {seen_samples}] Train Acc: {training_acc:.2f}% | Val Acc: {testing_acc:.2f}%")
 
-        if i% save_model_every_n_batches == 0:
+        if i % save_model_every_n_batches == 0:
             model_path = os.path.join(save_path, f'model_{args.run_index}.pt')
             torch.save(model, model_path)
             print('Model checkpoint saved.', flush=True)
@@ -165,7 +168,7 @@ if __name__ == '__main__':
             running_loss = 0.0
             correct = 0.0
             total = 0.0
-        
+
     model_path = os.path.join(save_path, f'model_{args.run_index}.pt')
     torch.save(model, model_path)
     print('Final model saved.', flush=True)
