@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class RandomCliffordCircuit():
+class RandomCliffordCircuit:
     def __init__(self, n_logical_qubits, depth, circuit_index):
         self.depth = depth
         self.n_logical_qubits = n_logical_qubits
@@ -11,8 +11,8 @@ class RandomCliffordCircuit():
         else:
             raise ValueError('Invalid circuit index')
         self.include_two_qubit_gates = circuit_index in ['4']
-        self.sq_gates = None
-        self.tq_gates = None
+        self.sq_gates = None # single-qubit gate
+        self.tq_gates = None # two-qubit gate
 
     def sample_circuit(self):
         self.sq_gates = np.random.choice(self.single_qubit_gate_list, size=(self.depth, self.n_logical_qubits))
