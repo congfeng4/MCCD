@@ -2,3 +2,5 @@ pymatching
 stim
 mle-decoder
 stimbposd
+seaborn
+pandas
