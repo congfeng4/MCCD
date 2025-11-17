@@ -2,13 +2,13 @@ import numpy as np
 
 
 class RandomCliffordCircuit:
-    def __init__(self, n_logical_qubits, depth, circuit_index):
+    def __init__(self, n_logical_qubits, depth, circuit_index, single_qubit_gate_list):
         self.depth = depth
         self.n_logical_qubits = n_logical_qubits
         self.circuit_index = circuit_index
         if circuit_index in ['3', '4']:
             # self.single_qubit_gate_list = ['I', 'X', 'Y', 'Z', 'H']
-            self.single_qubit_gate_list = ['I', 'X', 'Z', 'H'] # surface-stim 暂不支持Y门
+            self.single_qubit_gate_list = single_qubit_gate_list
         else:
             raise ValueError('Invalid circuit index')
         self.include_two_qubit_gates = circuit_index in ['4']
