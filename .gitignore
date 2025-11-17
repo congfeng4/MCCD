@@ -4,4 +4,4 @@
 .idea
 *.pyc
 .ipynb_checkpoints/
-
+/data
