@@ -1,7 +1,7 @@
 pymatching
-stim
 mle-decoder
 stimbposd
 seaborn
 pandas
 surface-sim
+stim
