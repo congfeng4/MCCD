@@ -1,0 +1,16 @@
+name: "Circuit-level noise setup — picture values"
+description: >
+  严格按图片参数折算：
+  sq_error_prob = 单比特 depolarizing 0.0001
+  tq_error_prob = 两比特 Pauli 通道总概率 0.0065
+  meas_error_prob = 0.002
+  reset_error_prob = 0.002
+  idle_error_prob = 移动引入总概率 2.4e-6
+setup:
+  - sq_error_prob: 0.0001
+    tq_error_prob: 0.0065
+    meas_error_prob: 0.002
+    reset_error_prob: 0.002
+    idle_error_prob: 2.4e-6
+    assign_error_flag: false
+    assign_error_prob: 0.0
