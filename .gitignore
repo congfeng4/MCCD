@@ -5,3 +5,7 @@
 *.pyc
 .ipynb_checkpoints/
 /data
+gurobi.log
+.vscode
+.DS_Store
+__pycache__/
