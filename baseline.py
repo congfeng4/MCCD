@@ -38,8 +38,6 @@ import os
 
 os.environ['GRB_LICENSE_FILE'] = '/Users/fengcong/.gurobi/gurobi.lic'
 
-# %%
-
 # %% [markdown]
 # ## Baseline Decoders
 # 
@@ -139,7 +137,7 @@ def run_decoder_tasks(root_dir, bench_circuits, bench_decoders, df_name):
         save_dir.parent.mkdir(parents=True, exist_ok=True)
         if save_dir.is_file():
             return
-            
+
         kwargs['circuit'] = stim.Circuit.from_file(StringIO(cir_str))
         try:
             res.update(run_decoder(**kwargs))
@@ -177,7 +175,7 @@ def load_circuits(root_dir: Path):
     for config_path in sorted(root_dir.glob('*_config.json')):
         config = json.loads(config_path.read_text())
 
-        for cir_path in root_dir.glob(config_path.stem.replace('_config', '_phy_trial*.stim')):
+        for cir_path in sorted(root_dir.glob(config_path.stem.replace('_config', '_phy_trial*.stim'))):
             phy_cir = stim.Circuit.from_file(cir_path)
             circuits.append((str(phy_cir), config))
 
@@ -217,12 +215,12 @@ fig5_circuits = load_circuits(root_dir / 'fig5/circuits')
 len(fig4_circuits), len(fig5_circuits)
 
 # %%
-df4 = run_decoder_tasks(root_dir / 'result',
+df4 = run_decoder_tasks(root_dir / 'fig4/result',
     fig4_circuits, DECODER_BASELINES.keys(), 'fig4-baselines')
 
 
 # %%
-df5 = run_decoder_tasks(root_dir / 'result',
+df5 = run_decoder_tasks(root_dir / 'fig5/result',
     fig5_circuits, DECODER_BASELINES.keys(), 'fig5-baselines')
 
 
