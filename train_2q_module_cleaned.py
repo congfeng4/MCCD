@@ -1,6 +1,6 @@
 # python train_2q_module_cleaned.py --if_final_round_syndrome --batch_size 128 --logical_circuit_index 4 --load_model trained_models/3twCWWAxZWKIEpe9 --save_model_every_n_batches 2 --validate_every_n_batches 1
 
-from mccd import MultiDepthCachedSyndromeDataset, CircuitLSTMDecoderw2Q
+from mccd import MultiDepthCachedSyndromeDataset, CircuitLSTMDecoderw2Q, get_available_device
 import torch
 from torch.utils.data import DataLoader
 import torch.optim as optim
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     logical_circuit_index = args.logical_circuit_index
     assert logical_circuit_index == '4'  # Require Type II circuit
 
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = get_available_device()
     num_ancillas = int(code_distance ** 2 - 1)
 
     model = CircuitLSTMDecoderw2Q(

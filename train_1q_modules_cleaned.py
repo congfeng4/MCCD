@@ -1,5 +1,5 @@
 # python train_1q_modules_cleaned.py --if_final_round_syndrome --batch_size 1024 --logical_circuit_index 3
-from mccd import MultiDepthCachedSyndromeDataset, CircuitLSTMDecoder
+from mccd import MultiDepthCachedSyndromeDataset, CircuitLSTMDecoder, get_available_device
 import torch
 from torch.utils.data import DataLoader
 import torch.optim as optim
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     logical_circuit_index = args.logical_circuit_index
     assert logical_circuit_index == '3'  # Require Type I circuit
 
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = get_available_device()
     num_ancillas = int(code_distance ** 2 - 1)
 
     model = CircuitLSTMDecoder(num_ancillas, num_ancillas * 8, num_layers=2).to(device)
