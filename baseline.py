@@ -59,9 +59,9 @@ os.environ['GRB_LICENSE_FILE'] = '/Users/fengcong/.gurobi/gurobi.lic'
 
 # %%
 DECODER_BASELINES = {
-    'BPOSD': partial(BPOSD, max_bp_iters=20),
+    #'BPOSD': partial(BPOSD, max_bp_iters=20),
     'MLE': MLE, # TODO: model too large. acacdemic license.
-    'MWPM': MWPM,
+   # 'MWPM': MWPM,
 }
 
 # %% [markdown]
